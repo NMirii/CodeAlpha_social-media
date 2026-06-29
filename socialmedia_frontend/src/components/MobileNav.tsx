@@ -4,15 +4,33 @@ import { usePathname } from 'next/navigation';
 import { Home, Search, Bell, User, PenSquare } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ComposeModal from './ComposeModal';
 import { Post } from '@/types';
 import toast from 'react-hot-toast';
+import { notifApi } from '@/lib/api';
 
 export default function MobileNav() {
   const pathname = usePathname();
   const { user, isAuthenticated } = useAuthStore();
   const [showCompose, setShowCompose] = useState(false);
+  const [unread, setUnread] = useState(0);
+
+  // Poll unread count every 30 seconds
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const fetch = () => {
+      notifApi.getCount().then((r) => setUnread(r.data.unread_count)).catch(() => {});
+    };
+    fetch();
+    const id = setInterval(fetch, 30_000);
+    return () => clearInterval(id);
+  }, [isAuthenticated]);
+
+  // Reset badge when on notifications page
+  useEffect(() => {
+    if (pathname === '/notifications') setUnread(0);
+  }, [pathname]);
 
   const handleNewPost = (_post: Post) => {
     toast.success('Post shared!');
@@ -63,7 +81,14 @@ export default function MobileNav() {
               pathname === '/notifications' ? 'text-brand' : 'text-text-muted'
             )}
           >
-            <Bell size={22} />
+            <div className="relative">
+              <Bell size={22} />
+              {unread > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[14px] h-3.5 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center px-0.5">
+                  {unread > 99 ? '99+' : unread}
+                </span>
+              )}
+            </div>
             <span className="text-[10px] font-medium">Alerts</span>
           </Link>
 
