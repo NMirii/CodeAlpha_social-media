@@ -17,18 +17,16 @@ export default function Sidebar() {
   const [showCompose, setShowCompose] = useState(false);
   const [unread, setUnread] = useState(0);
 
-  // Poll unread count every 30 seconds
   useEffect(() => {
     if (!isAuthenticated) return;
-    const fetch = () => {
+    const fetchCount = () => {
       notifApi.getCount().then((r) => setUnread(r.data.unread_count)).catch(() => {});
     };
-    fetch();
-    const id = setInterval(fetch, 30_000);
+    fetchCount();
+    const id = setInterval(fetchCount, 30_000);
     return () => clearInterval(id);
   }, [isAuthenticated]);
 
-  // Reset badge when on notifications page
   useEffect(() => {
     if (pathname === '/notifications') setUnread(0);
   }, [pathname]);
@@ -54,7 +52,6 @@ export default function Sidebar() {
   return (
     <>
       <div className="flex flex-col h-full">
-        {/* Logo */}
         <Link href="/feed" className="flex items-center gap-2.5 px-3 mb-8">
           <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center shadow-sm">
             <Leaf size={16} className="text-white" fill="white" />
@@ -62,7 +59,6 @@ export default function Sidebar() {
           <span className="text-xl font-bold text-text-primary tracking-tight">SocialApp</span>
         </Link>
 
-        {/* Nav */}
         <nav className="flex flex-col gap-1 flex-1">
           {navItems.map(({ href, icon: Icon, label, badge }) => (
             <Link
@@ -103,7 +99,6 @@ export default function Sidebar() {
           )}
         </nav>
 
-        {/* New Post button */}
         {isAuthenticated && (
           <button
             onClick={() => setShowCompose(true)}
@@ -114,7 +109,6 @@ export default function Sidebar() {
           </button>
         )}
 
-        {/* User card */}
         {isAuthenticated && user ? (
           <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-hover transition-colors cursor-pointer group border border-transparent hover:border-surface-border">
             <div className="w-9 h-9 rounded-full bg-brand/20 flex items-center justify-center text-brand font-semibold text-sm flex-shrink-0">
@@ -138,7 +132,6 @@ export default function Sidebar() {
         )}
       </div>
 
-      {/* Compose Modal */}
       {showCompose && (
         <ComposeModal
           onPost={handleNewPost}
