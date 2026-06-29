@@ -43,7 +43,9 @@ export const userApi = {
   search: (q: string) => api.get(`/users/search/?q=${encodeURIComponent(q)}`),
 };
 
-// ─── Posts ────────────────────────────────────────────────────────────────────
+/**
+ * Post & Feed API endpoints
+ */
 export const postApi = {
   getFeed: (page = 1) => api.get(`/feed/?page=${page}`),
   getAll: (page = 1) => api.get(`/posts/?page=${page}`),
