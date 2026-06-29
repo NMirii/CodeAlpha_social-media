@@ -1,9 +1,43 @@
+# ── Python / Django ────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.log
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Django
+*.pyc
+db.sqlite3
+media/
+staticfiles/
+socialmedia_backend/.env
+
+# ── Node / Next.js ─────────────────────────────────────────────────────────────
 node_modules/
 .next/
-__pycache__/
-*.pyc
-.env
-.env.*
-!.env.example
-!.env.local.example
-media/
+out/
+.cache/
+socialmedia_frontend/.env.local
+socialmedia_frontend/.env
+
+# ── OS ─────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ────────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
