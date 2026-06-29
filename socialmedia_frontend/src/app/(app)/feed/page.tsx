@@ -43,17 +43,14 @@ export default function FeedPage() {
 
   return (
     <div>
-      {/* Header */}
       <div className="sticky top-0 bg-white/90 backdrop-blur-md z-10 px-4 py-4 border-b border-surface-border">
         <h1 className="text-lg font-bold text-text-primary">
           {isAuthenticated ? 'Home' : 'Explore'}
         </h1>
       </div>
 
-      {/* Compose */}
       <ComposePost onPost={handleNewPost} />
 
-      {/* Posts */}
       {loading ? (
         <div className="flex justify-center py-16">
           <Loader2 size={24} className="text-brand animate-spin" />
