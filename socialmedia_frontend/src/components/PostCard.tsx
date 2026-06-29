@@ -10,13 +10,26 @@ import { useAuthStore } from '@/store/authStore';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 
+/**
+ * Props for the PostCard component.
+ */
 interface PostCardProps {
+  /** The post data object to render */
   post: Post;
+  /** Optional callback fired when the post is deleted by its author */
   onDelete?: (id: number) => void;
+  /** Determines whether to show the inline comment section (default: false) */
   showComments?: boolean;
 }
 
-export default function PostCard({ post, onDelete, showComments = false }: PostCardProps) {
+/**
+ * PostCard Component
+ * 
+ * Renders an individual post card, handling interactions such as liking, 
+ * navigating to the author's profile, and deleting the post (if the current 
+ * user is the author). Includes micro-animations for interactions.
+ */
+export default function PostCard({ post, onDelete }: PostCardProps) {
   const { user, isAuthenticated } = useAuthStore();
   const [liked, setLiked] = useState(post.is_liked);
   const [likesCount, setLikesCount] = useState(post.likes_count);
@@ -56,9 +69,8 @@ export default function PostCard({ post, onDelete, showComments = false }: PostC
   const isOwner = user?.id === post.author.id;
 
   return (
-    <article className="border-b border-surface-border px-4 py-4 hover:bg-surface-hover/30 transition-colors animate-fade-in">
+    <article className="border-b border-surface-border px-4 py-4 hover:bg-surface-hover/30 transition-colors">
       <div className="flex gap-3">
-        {/* Avatar */}
         <Link href={`/profile/${post.author.username}`} className="flex-shrink-0">
           <div className="w-10 h-10 rounded-full bg-brand/20 flex items-center justify-center text-brand font-semibold text-sm">
             {post.author.avatar ? (
@@ -70,7 +82,6 @@ export default function PostCard({ post, onDelete, showComments = false }: PostC
         </Link>
 
         <div className="flex-1 min-w-0">
-          {/* Header */}
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2 min-w-0">
               <Link href={`/profile/${post.author.username}`} className="font-semibold text-text-primary hover:underline truncate text-sm">
@@ -99,7 +110,6 @@ export default function PostCard({ post, onDelete, showComments = false }: PostC
             )}
           </div>
 
-          {/* Content */}
           <Link href={`/posts/${post.id}`}>
             <p className="text-text-primary text-sm leading-relaxed mb-3 whitespace-pre-wrap">{post.content}</p>
             {post.image && (
@@ -109,7 +119,6 @@ export default function PostCard({ post, onDelete, showComments = false }: PostC
             )}
           </Link>
 
-          {/* Actions */}
           <div className="flex items-center gap-6">
             <button
               onClick={handleLike}
