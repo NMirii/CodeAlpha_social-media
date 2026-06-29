@@ -3,6 +3,10 @@ from users.models import User
 
 
 class Post(models.Model):
+    """
+    Represents a social media post created by a user.
+    Supports text content and optional image attachments.
+    """
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     content = models.TextField(max_length=2000)
     image = models.ImageField(upload_to='posts/', blank=True, null=True)
@@ -26,6 +30,10 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
+    """
+    Represents a comment on a Post. 
+    Supports recursive nesting for threaded replies via the parent field.
+    """
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField(max_length=500)
